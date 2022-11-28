@@ -27,6 +27,8 @@ public class AgendaServiceImpl implements AgendaService {
 	@Override
 	public List<Agenda> listAll() {
 		return (List<Agenda>) repository.findAll();
+
+		// TODO controllo che sia loggato e/o lista per utente
 	}
 
 	@Override
@@ -37,8 +39,8 @@ public class AgendaServiceImpl implements AgendaService {
 
 		Agenda result = repository.findById(id).orElse(null);
 
-		if (utenteLoggato.getRuoli().stream().map(r -> r.getCodice().equals("ROLE_ADMIN")).findAny().orElse(null) != null
-				|| (result != null && utenteLoggato.getId() == result.getUtente().getId())) {
+		if (utenteLoggato.getRuoli().stream().map(r -> r.getCodice().equals("ROLE_ADMIN")).findAny()
+				.orElse(null) != null || (result != null && utenteLoggato.getId() == result.getUtente().getId())) {
 			return result;
 		} else {
 			throw new PermessoNegatoException("Non hai i permessi per visualizzare questo elemento!");
@@ -48,11 +50,12 @@ public class AgendaServiceImpl implements AgendaService {
 	@Override
 	@Transactional
 	public void aggiorna(Agenda agendaInstance) throws PermessoNegatoException {
-		
+
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		Utente utenteLoggato = utenteService.findByUsername(username);
 
-		if (utenteLoggato.getRuoli().stream().map(r -> r.getCodice().equals("ROLE_ADMIN")).findAny().orElse(null) != null
+		if (utenteLoggato.getRuoli().stream().map(r -> r.getCodice().equals("ROLE_ADMIN")).findAny()
+				.orElse(null) != null
 				|| (agendaInstance != null && utenteLoggato.getId() == agendaInstance.getUtente().getId())) {
 			repository.save(agendaInstance);
 		} else {
@@ -79,14 +82,14 @@ public class AgendaServiceImpl implements AgendaService {
 	@Override
 	@Transactional
 	public void rimuovi(Long idToRemove) throws PermessoNegatoException {
-		
+
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		Utente utenteLoggato = utenteService.findByUsername(username);
 
 		Agenda result = repository.findById(idToRemove).orElse(null);
 
-		if (utenteLoggato.getRuoli().stream().map(r -> r.getCodice().equals("ROLE_ADMIN")).findAny().orElse(null) != null
-				|| (result != null && utenteLoggato.getId() == result.getUtente().getId())) {
+		if (utenteLoggato.getRuoli().stream().map(r -> r.getCodice().equals("ROLE_ADMIN")).findAny()
+				.orElse(null) != null || (result != null && utenteLoggato.getId() == result.getUtente().getId())) {
 			repository.deleteById(idToRemove);
 		} else {
 			throw new PermessoNegatoException("Non hai i permessi per rimuovere questo elemento!");
