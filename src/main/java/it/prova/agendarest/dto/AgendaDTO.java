@@ -25,7 +25,7 @@ public class AgendaDTO {
 	@NotNull(message = "{dataOraFine.notnull}")
 	private LocalDateTime dataOraFine;
 
-	@JsonIgnoreProperties(value = {"utente"})
+	@JsonIgnoreProperties(value = { "utente" })
 	private UtenteDTO utenteDTO;
 
 	public AgendaDTO() {
@@ -83,9 +83,12 @@ public class AgendaDTO {
 	}
 
 	public Agenda buildAgendaModel() {
-		Agenda result = new Agenda(this.id, this.descrizione, this.dataOraInizio, this.dataOraFine,
-				this.utenteDTO.buildUtenteModel(false));
+		Agenda result = new Agenda(this.id, this.descrizione, this.dataOraInizio, this.dataOraFine);
 
+		if (this.utenteDTO != null) {
+			result.setUtente(this.utenteDTO.buildUtenteModel(false));
+		}
+		
 		return result;
 	}
 
@@ -103,7 +106,7 @@ public class AgendaDTO {
 			return AgendaDTO.buildAgendaDTOFromModel(agendaEntity);
 		}).collect(Collectors.toSet());
 	}
-	
+
 	public static List<AgendaDTO> createAgendaDTOListFromModelList(List<Agenda> modelSetInput) {
 
 		return modelSetInput.stream().map(agendaEntity -> {
