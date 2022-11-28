@@ -1,5 +1,6 @@
 package it.prova.agendarest;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import it.prova.agendarest.model.Agenda;
 import it.prova.agendarest.model.Ruolo;
 import it.prova.agendarest.model.Utente;
 import it.prova.agendarest.service.ruolo.RuoloService;
@@ -50,6 +52,7 @@ public class AgendarestApplication implements CommandLineRunner {
 			utenteServiceInstance.inserisciNuovo(classicUser);
 			utenteServiceInstance.changeUserAbilitation(classicUser.getId());
 		}
+
 	}
 
 }
