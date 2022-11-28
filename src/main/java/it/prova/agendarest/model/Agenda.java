@@ -38,6 +38,14 @@ public class Agenda {
 
 	}
 
+	public Agenda(Long id, String descrizione, LocalDateTime dataOraInizio, LocalDateTime dataOraFine) {
+		super();
+		this.id = id;
+		this.descrizione = descrizione;
+		this.dataOraInizio = dataOraInizio;
+		this.dataOraFine = dataOraFine;
+	}
+
 	public Agenda(Long id, String descrizione, LocalDateTime dataOraInizio, LocalDateTime dataOraFine, Utente utente) {
 		super();
 		this.id = id;
