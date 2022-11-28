@@ -11,6 +11,7 @@ import it.prova.agendarest.model.Agenda;
 import it.prova.agendarest.model.Utente;
 import it.prova.agendarest.repository.agenda.AgendaRepository;
 import it.prova.agendarest.service.utente.UtenteService;
+import it.prova.agendarest.web.api.exception.AgendaNotFoundException;
 import it.prova.agendarest.web.api.exception.PermessoNegatoException;
 import it.prova.agendarest.web.api.exception.UtenteLoggatoNotFoundException;
 
@@ -38,9 +39,13 @@ public class AgendaServiceImpl implements AgendaService {
 		Utente utenteLoggato = utenteService.findByUsername(username);
 
 		Agenda result = repository.findById(id).orElse(null);
+		
+		if (result == null) {
+			throw new AgendaNotFoundException("Agenda non trovata!");
+		}
 
-		if (utenteLoggato.getRuoli().stream().map(r -> r.getCodice().equals("ROLE_ADMIN")).findAny()
-				.orElse(null) != null || (result != null && utenteLoggato.getId() == result.getUtente().getId())) {
+		if (utenteLoggato.getRuoli().stream().filter(r -> r.getCodice().equals("ROLE_ADMIN")).findAny()
+				.orElse(null) != null || utenteLoggato.getId() == result.getUtente().getId()) {
 			return result;
 		} else {
 			throw new PermessoNegatoException("Non hai i permessi per visualizzare questo elemento!");
@@ -54,7 +59,7 @@ public class AgendaServiceImpl implements AgendaService {
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		Utente utenteLoggato = utenteService.findByUsername(username);
 
-		if (utenteLoggato.getRuoli().stream().map(r -> r.getCodice().equals("ROLE_ADMIN")).findAny()
+		if (utenteLoggato.getRuoli().stream().filter(r -> r.getCodice().equals("ROLE_ADMIN")).findAny()
 				.orElse(null) != null
 				|| (agendaInstance != null && utenteLoggato.getId() == agendaInstance.getUtente().getId())) {
 			repository.save(agendaInstance);
@@ -87,9 +92,13 @@ public class AgendaServiceImpl implements AgendaService {
 		Utente utenteLoggato = utenteService.findByUsername(username);
 
 		Agenda result = repository.findById(idToRemove).orElse(null);
+		
+		if (result == null) {
+			throw new AgendaNotFoundException("Agenda non trovata!");
+		}
 
-		if (utenteLoggato.getRuoli().stream().map(r -> r.getCodice().equals("ROLE_ADMIN")).findAny()
-				.orElse(null) != null || (result != null && utenteLoggato.getId() == result.getUtente().getId())) {
+		if (utenteLoggato.getRuoli().stream().filter(r -> r.getCodice().equals("ROLE_ADMIN")).findAny()
+				.orElse(null) != null || utenteLoggato.getId() == result.getUtente().getId()) {
 			repository.deleteById(idToRemove);
 		} else {
 			throw new PermessoNegatoException("Non hai i permessi per rimuovere questo elemento!");
