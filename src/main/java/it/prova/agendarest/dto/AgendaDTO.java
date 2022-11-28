@@ -1,6 +1,7 @@
 package it.prova.agendarest.dto;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -101,6 +102,13 @@ public class AgendaDTO {
 		return modelSetInput.stream().map(agendaEntity -> {
 			return AgendaDTO.buildAgendaDTOFromModel(agendaEntity);
 		}).collect(Collectors.toSet());
+	}
+	
+	public static List<AgendaDTO> createAgendaDTOListFromModelList(List<Agenda> modelSetInput) {
+
+		return modelSetInput.stream().map(agendaEntity -> {
+			return AgendaDTO.buildAgendaDTOFromModel(agendaEntity);
+		}).collect(Collectors.toList());
 	}
 
 }
