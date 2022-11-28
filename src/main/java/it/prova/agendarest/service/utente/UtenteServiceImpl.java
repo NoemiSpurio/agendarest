@@ -14,7 +14,7 @@ import it.prova.agendarest.repository.utente.UtenteRepository;
 
 @Service
 @Transactional(readOnly = true)
-public class UtenteServiceImpl {
+public class UtenteServiceImpl implements UtenteService {
 
 	@Autowired
 	private UtenteRepository repository;
