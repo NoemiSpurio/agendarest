@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import it.prova.agendarest.model.Agenda;
 
 public class AgendaDTO {
@@ -22,7 +24,7 @@ public class AgendaDTO {
 	@NotNull(message = "{dataOraFine.notnull}")
 	private LocalDateTime dataOraFine;
 
-	@NotNull(message = "{utente.notnull}")
+	@JsonIgnoreProperties(value = {"utente"})
 	private UtenteDTO utenteDTO;
 
 	public AgendaDTO() {
